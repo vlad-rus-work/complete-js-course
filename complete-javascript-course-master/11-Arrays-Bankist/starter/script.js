@@ -61,10 +61,12 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = "";
 
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? "deposit" : "withdrawal";
 
     const html = `
@@ -126,7 +128,7 @@ const updateUI = function (acc) {
   calcDisplaySummary(currentAccount);
 };
 
-// Event Handler
+// Event Handlers
 let currentAccount;
 
 btnLogin.addEventListener("click", function (e) {
@@ -172,6 +174,55 @@ btnTransfer.addEventListener("click", function (e) {
     // Update UI
     updateUI(currentAccount);
   }
+});
+
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((mov) => mov >= amount * 0.1)
+  ) {
+    // Add movement
+    currentAccount.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = "";
+});
+
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+  console.log("Delete");
+
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      (acc) => acc.username === currentAccount.username
+    );
+    console.log(index);
+
+    // Delete Account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+
+  inputCloseUsername.value = inputClosePin.value = "";
+});
+
+let sorted = false;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 
 /////////////////////////////////////////////////
@@ -375,3 +426,60 @@ const accountFor = function (accs) {
 console.log(accountFor(accounts));
 
 */
+
+// const diceRolls = Array.from(
+//   { length: 100 },
+//   (_, i) => Math.trunc(Math.random() * 6) + 1
+// );
+// console.log(diceRolls);
+
+/*
+labelBalance.addEventListener("click", function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+    (el) => Number(el.textContent.replace("€", ""))
+  );
+
+  console.log(movementsUI);
+});
+
+*/
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ["Alice", "Bob"] },
+  { weight: 8, curFood: 200, owners: ["Matilda"] },
+  { weight: 13, curFood: 275, owners: ["Sarah", "John"] },
+  { weight: 32, curFood: 340, owners: ["Michael"] },
+];
+
+// 1.
+dogs.forEach((dog) => (dog.recFood = Math.trunc(dog.weight ** 0.75 * 28)));
+
+// 2.
+const dogSarah = dogs.find((dog) => dog.owners.includes("Sarah"));
+// console.log(
+//   `Sarah's dog is eating too ${
+//     dogSarah.curFood > dogSarah.recFood ? "much" : "little"
+//   }`
+// );
+
+// 3.
+// const ownersEatTooMuchBad = dogs
+//   .filter((dog) => (dog.curFood > dog.recFood ? dog.owners : ""))
+//   .flat();
+
+// const ownersEatTooLittle = dogs.filter((dog) =>
+//   dog.curFood < dog.recFood ? dog.owners : ""
+// );
+// console.log(ownersEatTooMuchBad);
+
+// 3.
+const ownersEatTooMuch = dogs
+  .filter((dog) => dog.curFood > dog.recFood)
+  .flatMap((dog) => dog.owners);
+
+const ownesEatTooLittle = dogs
+  .filter((dog) => dog.curFood < dog.recFood)
+  .flatMap((dog) => dog.owners);
+
+console.log(ownersEatTooMuch, ownesEatTooLittle);
