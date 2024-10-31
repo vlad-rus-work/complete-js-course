@@ -251,3 +251,7 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+setTimeout(() => {
+  console.log('Here is your pizza');
+}, 2000);
