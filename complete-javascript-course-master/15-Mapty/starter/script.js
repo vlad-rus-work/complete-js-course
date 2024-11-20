@@ -156,6 +156,7 @@ class App {
     this._renderWorkoutMarker(workout);
 
     // Render workout on list
+    this._renderWorkout(workout);
 
     // Hide form + Clear input fields
     inputDistance.value =
@@ -182,6 +183,8 @@ class App {
       .setPopupContent("workout")
       .openPopup();
   }
+
+  _renderWorkout(workout) {}
 }
 
 const app = new App();
