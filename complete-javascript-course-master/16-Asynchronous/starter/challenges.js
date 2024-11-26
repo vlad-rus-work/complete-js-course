@@ -49,6 +49,8 @@ const whereAmI = function (lat, lng) {
 
 whereAmI(52.508, 13.381);
 */
+
+/*
 const imagesContainer = document.querySelector(".images");
 
 const createImage = function (imgPath) {
@@ -72,3 +74,22 @@ createImage("img/img-1.jpg")
     console.log("Image 1 loaded");
   })
   .catch((err) => console.log(err));
+*/
+
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement("img");
+    img.src = imgPath;
+
+    img.addEventListener("load", function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+
+    img.addEventListener("error", function () {
+      reject(new Error("Image not found"));
+    });
+  });
+};
+
+const loadNPause = async function () {};
